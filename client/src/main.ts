@@ -1,5 +1,4 @@
 import { AvatarRenderer } from "./avatar/AvatarRenderer.js";
-import { Emotion } from "./avatar/types.js";
 import { AudioController } from "./audio/AudioController.js";
 import { RelayClient } from "./connection/RelayClient.js";
 
@@ -10,13 +9,37 @@ const btnConnect = document.getElementById("btnConnect") as HTMLButtonElement;
 const btnDisconnect = document.getElementById("btnDisconnect") as HTMLButtonElement;
 const mouthMeter = document.getElementById("mouthMeter") as HTMLElement;
 const transcriptBox = document.getElementById("transcriptBox") as HTMLElement;
-const emotionButtons = document.querySelectorAll(".btn-emotion");
+const robotElement = document.getElementById("stackchanRobot") as HTMLElement;
+const robotStage = document.getElementById("robotStage") as HTMLElement;
 
 // 1. Initialize Avatar Renderer
 const avatar = new AvatarRenderer(canvas);
 avatar.start();
 
-// 2. Initialize Audio Controller & Relay Client
+// 2. Interactive Gaze Tracking on Mouse Movement (2D Face)
+if (robotStage) {
+  window.addEventListener("mousemove", (e: MouseEvent) => {
+    const rect = robotStage.getBoundingClientRect();
+    const stageCenterX = rect.left + rect.width / 2;
+    const stageCenterY = rect.top + rect.height / 2;
+
+    // Calculate normalized offset from center (-1.0 to 1.0)
+    const deltaX = (e.clientX - stageCenterX) / (window.innerWidth / 2);
+    const deltaY = (e.clientY - stageCenterY) / (window.innerHeight / 2);
+
+    const clampedX = Math.max(-1, Math.min(1, deltaX));
+    const clampedY = Math.max(-1, Math.min(1, deltaY));
+
+    // Natural Gaze tracking
+    avatar.setGaze(clampedX * 0.75, clampedY * 0.75);
+  });
+
+  window.addEventListener("mouseleave", () => {
+    avatar.setGaze(0, 0);
+  });
+}
+
+// 3. Initialize Audio Controller & Relay Client
 let audioController: AudioController | null = null;
 let relayClient: RelayClient | null = null;
 
@@ -29,6 +52,7 @@ function appendTranscript(text: string, sender: "system" | "stackchan" | "user" 
     p.className = "msg-stackchan";
     p.textContent = `🤖 Stack-chan: ${text}`;
   } else {
+    p.className = "msg-user";
     p.textContent = `👤 You: ${text}`;
   }
   transcriptBox.appendChild(p);
@@ -36,29 +60,38 @@ function appendTranscript(text: string, sender: "system" | "stackchan" | "user" 
 }
 
 function updateStatus(status: "disconnected" | "connecting" | "connected" | "speaking") {
-  statusBadge.className = `badge ${status}`;
+  statusBadge.className = `pixel-badge ${status}`;
+
+  if (robotElement) {
+    if (status === "speaking") {
+      robotElement.className = "stackchan-robot speaking";
+    } else {
+      robotElement.className = "stackchan-robot idle";
+    }
+  }
+
   switch (status) {
     case "disconnected":
-      statusBadge.textContent = "Disconnected";
+      statusBadge.textContent = "OFFLINE";
       btnConnect.disabled = false;
       btnDisconnect.disabled = true;
       avatar.setListening(false);
       avatar.setSpeaking(false);
       break;
     case "connecting":
-      statusBadge.textContent = "Connecting...";
+      statusBadge.textContent = "CONNECTING...";
       btnConnect.disabled = true;
       btnDisconnect.disabled = false;
       break;
     case "connected":
-      statusBadge.textContent = "Ready (Listening)";
+      statusBadge.textContent = "READY (LISTEN)";
       btnConnect.disabled = true;
       btnDisconnect.disabled = false;
       avatar.setListening(true);
       avatar.setSpeaking(false);
       break;
     case "speaking":
-      statusBadge.textContent = "Speaking...";
+      statusBadge.textContent = "TALKING ★";
       avatar.setSpeaking(true);
       break;
   }
@@ -67,9 +100,9 @@ function updateStatus(status: "disconnected" | "connecting" | "connected" | "spe
 async function startSession() {
   try {
     updateStatus("connecting");
-    appendTranscript("Connecting to Backend & Gemini Live API...", "system");
+    appendTranscript("⚡ Gemini Live に せつぞく しています...", "system");
 
-    // 1. Initialize Audio Controller (ensure AudioContext is unlocked by user gesture)
+    // 1. Initialize Audio Controller (unlock AudioContext via user interaction)
     if (!audioController) {
       audioController = new AudioController({
         onPcmData16k: (base64) => {
@@ -79,7 +112,9 @@ async function startSession() {
         },
         onRmsLevel: (rms) => {
           avatar.setMouthOpenRatio(rms);
-          mouthMeter.style.width = `${Math.min(100, rms * 100)}%`;
+          if (mouthMeter) {
+            mouthMeter.style.width = `${Math.min(100, rms * 100)}%`;
+          }
         },
       });
     }
@@ -89,22 +124,25 @@ async function startSession() {
     relayClient = new RelayClient({
       onSessionStarted: async () => {
         updateStatus("connected");
-        appendTranscript("✅ Connected to Gemini Live! Starting microphone...", "system");
+        appendTranscript("✨ せつぞく かんりょう！マイクを つかえます。", "system");
 
-        // Only start microphone AFTER Gemini Live setup is complete
+        // Start microphone after Gemini Live is ready
         try {
           if (audioController) {
             await audioController.startMicrophone();
-            appendTranscript("🎙️ Microphone active. Say something to Stack-chan!", "system");
+            appendTranscript("🎙️ マイクON！Stack-chan に はなしかけてね！", "system");
           }
         } catch (micErr: any) {
-          appendTranscript(`❌ Microphone Error: ${micErr.message}`, "system");
+          appendTranscript(`❌ マイク エラー: ${micErr.message}`, "system");
           stopSession();
         }
       },
       onSessionClosed: (reason) => {
         updateStatus("disconnected");
-        appendTranscript(`Session closed: ${reason || "Connection ended"}`, "system");
+        appendTranscript(
+          `🔌 セッション しゅうりょう: ${reason || "せつぞくが きれました"}`,
+          "system",
+        );
         if (audioController) {
           audioController.stopMicrophone();
         }
@@ -119,19 +157,21 @@ async function startSession() {
         appendTranscript(text, "stackchan");
       },
       onInterrupted: () => {
-        appendTranscript("(Interrupted)", "system");
+        appendTranscript("(わりこみ)", "system");
         if (audioController) {
           audioController.clearPlayback();
         }
         avatar.setMouthOpenRatio(0);
-        mouthMeter.style.width = "0%";
+        if (mouthMeter) {
+          mouthMeter.style.width = "0%";
+        }
         updateStatus("connected");
       },
       onTurnComplete: () => {
         updateStatus("connected");
       },
       onError: (err) => {
-        appendTranscript(`❌ Error: ${err}`, "system");
+        appendTranscript(`❌ エラー: ${err}`, "system");
         updateStatus("disconnected");
       },
       onStatusChange: (status) => {
@@ -144,7 +184,7 @@ async function startSession() {
     relayClient.connect();
   } catch (err: any) {
     console.error("Failed to start session:", err);
-    appendTranscript(`❌ Error starting session: ${err.message}`, "system");
+    appendTranscript(`❌ せつぞく エラー: ${err.message}`, "system");
     updateStatus("disconnected");
   }
 }
@@ -159,7 +199,9 @@ function stopSession() {
     audioController = null;
   }
   avatar.setMouthOpenRatio(0);
-  mouthMeter.style.width = "0%";
+  if (mouthMeter) {
+    mouthMeter.style.width = "0%";
+  }
   updateStatus("disconnected");
 }
 
@@ -170,17 +212,4 @@ btnConnect.addEventListener("click", () => {
 
 btnDisconnect.addEventListener("click", () => {
   stopSession();
-});
-
-// Emotion Buttons
-emotionButtons.forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    emotionButtons.forEach((b) => b.classList.remove("active"));
-    const target = e.currentTarget as HTMLButtonElement;
-    target.classList.add("active");
-    const emotion = target.getAttribute("data-emotion") as Emotion;
-    if (emotion) {
-      avatar.setEmotion(emotion);
-    }
-  });
 });

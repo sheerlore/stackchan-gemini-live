@@ -3,68 +3,107 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stack-chan × Gemini Live (Web PoC)</title>
+    <title>🍬 Stack-chan × Gemini Live</title>
+    <!-- Pixel Fonts: DotGothic16 and Press Start 2P -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <div id="app">
-      <header class="header">
-        <h1>Stack-chan × Gemini Live</h1>
-        <p class="subtitle">Gemini 2.0 Multimodal Live API Voice & Face PoC</p>
+    <div id="app" class="candy-package-app">
+      <!-- Candy Package Header with Ribbon & Brand Tag -->
+      <header class="package-header">
+        <div class="brand-badge">★ M5STACK CORES3 STACK-CHAN ★</div>
+        <div class="header-main">
+          <div class="title-group">
+            <span class="candy-icon">🍬</span>
+            <h1>STACK-CHAN</h1>
+            <span class="sub-flavor">GEMINI LIVE</span>
+          </div>
+          <div class="status-wrap">
+            <span id="statusBadge" class="pixel-badge disconnected">OFFLINE</span>
+          </div>
+        </div>
       </header>
 
-      <main class="main-container">
-        <!-- Stack-chan Face Display (320x240 Canvas) -->
-        <div class="avatar-frame">
-          <canvas id="avatarCanvas" width="640" height="480"></canvas>
-          <div class="status-overlay">
-            <span id="statusBadge" class="badge disconnected">Disconnected</span>
+      <!-- Main Stage: Pure 2D Flat CoreS3 Face & Control Deck -->
+      <main class="package-body">
+        <!-- Robot Stage (2D Flat Showcase) -->
+        <div id="robotStage" class="robot-showcase">
+          <div class="showcase-backdrop"></div>
+
+          <div id="stackchanRobot" class="stackchan-robot idle">
+            <!-- 2D M5Stack CoreS3 Square Face Shell -->
+            <div id="robotHead" class="cores3-face-shell">
+              <!-- Full Black Glass Bezel -->
+              <div class="head-bezel">
+                <!-- Inner Screen Canvas (2.0" IPS LCD) -->
+                <div class="screen-wrapper">
+                  <canvas id="avatarCanvas" width="640" height="480"></canvas>
+                  <div class="screen-glass-glare"></div>
+                </div>
+
+                <!-- Bottom Sensor Bar (Camera with orange ring, mics, LEDs) -->
+                <div class="bezel-bottom">
+                  <span class="sensor-hole sensor-mic-l"></span>
+                  <span class="sensor-hole sensor-ir"></span>
+                  <!-- Center Camera with Signature Orange Ring -->
+                  <div class="sensor-camera-wrap">
+                    <span class="camera-orange-ring"></span>
+                    <span class="camera-lens"></span>
+                  </div>
+                  <span class="sensor-hole sensor-led"></span>
+                  <span class="sensor-hole sensor-mic-r"></span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Controls -->
-        <div class="controls-panel">
-          <div class="action-buttons">
-            <button id="btnConnect" class="btn btn-primary">
-              <span class="icon">🎙️</span> Start Conversation
+        <!-- Pop Candy Control Deck -->
+        <div class="candy-deck">
+          <!-- Action Buttons & Candy Meter -->
+          <div class="deck-row action-row">
+            <button id="btnConnect" class="pop-btn btn-start">
+              <span class="btn-icon">🎙️</span> START TALK
             </button>
-            <button id="btnDisconnect" class="btn btn-danger" disabled>
-              <span class="icon">⏹️</span> Disconnect
+            <button id="btnDisconnect" class="pop-btn btn-stop" disabled>
+              <span class="btn-icon">⏹️</span> STOP
             </button>
-          </div>
 
-          <!-- Live Visualizer & Meters -->
-          <div class="meters-container">
-            <div class="meter-item">
-              <label>Lip Sync / RMS</label>
-              <div class="progress-bar">
-                <div id="mouthMeter" class="progress-fill"></div>
+            <!-- Candy Bar Style Voice Meter -->
+            <div class="candy-meter-box">
+              <div class="meter-header">
+                <span class="meter-title">VOICE LEVEL</span>
+                <span class="meter-sparkle">✨</span>
+              </div>
+              <div class="candy-progress-bar">
+                <div id="mouthMeter" class="candy-progress-fill"></div>
               </div>
             </div>
           </div>
 
-          <!-- Emotion Preset Buttons for Testing -->
-          <div class="emotion-picker">
-            <label>Emotion Test:</label>
-            <div class="button-group">
-              <button class="btn-emotion" data-emotion="neutral">Neutral</button>
-              <button class="btn-emotion" data-emotion="happy">Happy 😊</button>
-              <button class="btn-emotion" data-emotion="angry">Angry 😠</button>
-              <button class="btn-emotion" data-emotion="sad">Sad 😢</button>
-              <button class="btn-emotion" data-emotion="doubt">Doubt 🤔</button>
-              <button class="btn-emotion" data-emotion="sleepy">Sleepy 😴</button>
+          <!-- Sweet Dialog Window -->
+          <div class="deck-row candy-dialog-window">
+            <div class="dialog-header">
+              <span class="dialog-title">💬 CHAT LOG</span>
+              <span class="package-serial">No. 001-POP</span>
             </div>
-          </div>
-
-          <!-- Transcript / Chat Log -->
-          <div class="transcript-container">
-            <label>Conversation Log:</label>
-            <div id="transcriptBox" class="transcript-box">
-              <p class="system-msg">Press "Start Conversation" and speak into your microphone.</p>
+            <div id="transcriptBox" class="dialog-content">
+              <p class="system-msg">「START TALK」をおして Stack-chan にはなしかけてね！</p>
             </div>
           </div>
         </div>
       </main>
+
+      <!-- Package Footer Note -->
+      <footer class="package-footer">
+        <span>★ DELICIOUS REALTIME VOICE COMPANION ★ GEMINI 2.5 NATIVE AUDIO ★</span>
+      </footer>
     </div>
 
     <script type="module" src="/src/main.ts"></script>
