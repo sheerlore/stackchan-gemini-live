@@ -1,0 +1,16 @@
+{
+  "name": "stackchan-gemini-live-client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "vp build",
+    "preview": "vp preview",
+    "check": "vp check"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vite-plus": "^0.1.21"
+  }
+}

@@ -1,3 +1,6 @@
 [submodule "reference/StackChan"]
 	path = reference/StackChan
 	url = https://github.com/m5stack/StackChan
+[submodule "reference/ganesha-stackchan"]
+	path = reference/ganesha-stackchan
+	url = git@github.com:ramtuc/ganesha-stackchan.git

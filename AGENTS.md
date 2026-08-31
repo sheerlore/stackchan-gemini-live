@@ -32,16 +32,14 @@ Gemini 2.0 Multimodal Live API による超低遅延な双方向音声・視覚�
 ```
 stackchan-gemini-live/
 ├── reference/                # 外部参照用リポジトリ (Git Submodules)
-│   └── StackChan/            # 公式 m5stack/StackChan (顔デザイン、プロトコル、ファームウェア等の参照用)
+│   ├── StackChan/            # 公式 m5stack/StackChan (顔デザイン、プロトコル、ファームウェア等の参照用)
+│   └── ganesha-stackchan/    # 参考用 ganesha-stackchan リポジトリ
+├── client/                   # フロントエンド (Vite+ / TypeScript / Canvas Face / Web Audio)
+├── server/                   # バックエンド (Node.js / TypeScript / @google/genai Live API)
 ├── AGENTS.md                 # AI エージェント向け開発ガイドライン (本ファイル)
 ├── README.md                 # プロジェクト概要 & 利用ガイド
-└── (今後追加予定のソースコード)
-    ├── src/                  # アプリケーションソースコード
-    │   ├── face/             # Stack-chan 顔描画 (Canvas/SVG, アニメーション)
-    │   ├── live/             # Gemini Multimodal Live API 接続 (WebSocket / 音声ストリーム)
-    │   └── mcp/              # MCP クライアント & ツールハンドラ
-    ├── package.json
-    └── ...
+├── .env.example              # 環境変数テンプレート
+└── package.json              # ルート workspace
 ```
 
 ### ⚠️ リファレンス (`reference/`) の取り扱いルール
@@ -81,7 +79,8 @@ stackchan-gemini-live/
   - 感情表現 (Emotions): `NORMAL`, `HAPPY`, `SLEEPY`, `ANGRY`, `SAD`, `SURPRISED`, `DOUBTFUL`
 
 ### 4.2 Gemini Multimodal Live API の通信仕様
-- **エンドポイント**: `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent`
-- **音声入力 (Client -> Server)**: PCM 16kHz / 16-bit / Mono (Little-Endian)
-- **音声出力 (Server -> Client)**: PCM 24kHz / 16-bit / Mono (Little-Endian)
+- **SDK**: `@google/genai` (`ai.live.connect`)
+- **利用モデル**: `gemini-2.5-flash-native-audio-latest`
+- **音声入力 (Client -> Server -> Gemini)**: PCM 16kHz / 16-bit / Mono (Little-Endian)
+- **音声出力 (Gemini -> Server -> Client)**: PCM 24kHz / 16-bit / Mono (Little-Endian)
 - **Tool Calling (MCP)**: `toolCall` メッセージを受信し、ローカル/リモートの MCP ツールを実行して `toolResponse` を返送する。

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stack-chan × Gemini Live (Web PoC)</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1>Stack-chan × Gemini Live</h1>
+        <p class="subtitle">Gemini 2.0 Multimodal Live API Voice & Face PoC</p>
+      </header>
+
+      <main class="main-container">
+        <!-- Stack-chan Face Display (320x240 Canvas) -->
+        <div class="avatar-frame">
+          <canvas id="avatarCanvas" width="640" height="480"></canvas>
+          <div class="status-overlay">
+            <span id="statusBadge" class="badge disconnected">Disconnected</span>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-panel">
+          <div class="action-buttons">
+            <button id="btnConnect" class="btn btn-primary">
+              <span class="icon">🎙️</span> Start Conversation
+            </button>
+            <button id="btnDisconnect" class="btn btn-danger" disabled>
+              <span class="icon">⏹️</span> Disconnect
+            </button>
+          </div>
+
+          <!-- Live Visualizer & Meters -->
+          <div class="meters-container">
+            <div class="meter-item">
+              <label>Lip Sync / RMS</label>
+              <div class="progress-bar">
+                <div id="mouthMeter" class="progress-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Emotion Preset Buttons for Testing -->
+          <div class="emotion-picker">
+            <label>Emotion Test:</label>
+            <div class="button-group">
+              <button class="btn-emotion" data-emotion="neutral">Neutral</button>
+              <button class="btn-emotion" data-emotion="happy">Happy 😊</button>
+              <button class="btn-emotion" data-emotion="angry">Angry 😠</button>
+              <button class="btn-emotion" data-emotion="sad">Sad 😢</button>
+              <button class="btn-emotion" data-emotion="doubt">Doubt 🤔</button>
+              <button class="btn-emotion" data-emotion="sleepy">Sleepy 😴</button>
+            </div>
+          </div>
+
+          <!-- Transcript / Chat Log -->
+          <div class="transcript-container">
+            <label>Conversation Log:</label>
+            <div id="transcriptBox" class="transcript-box">
+              <p class="system-msg">Press "Start Conversation" and speak into your microphone.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
