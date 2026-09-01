@@ -16,11 +16,10 @@ export class RelayClient {
 
   constructor(events: RelayClientEvents) {
     this.events = events;
-    // Determine backend WebSocket URL (direct port 3000 or current host /ws)
+    // Determine backend WebSocket URL (always same-origin /ws)
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const hostname = window.location.hostname || "localhost";
-    // When running Vite dev server (port 5173), connect directly to backend port 3000
-    const port = window.location.port === "5173" ? "3000" : window.location.port;
+    const port = window.location.port;
     this.url = `${protocol}//${hostname}${port ? `:${port}` : ""}/ws`;
     console.log(`[RelayClient] Target WebSocket URL: ${this.url}`);
   }
