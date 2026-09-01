@@ -1,5 +1,5 @@
 /* ==========================================================================
-   🍬 Sweet Candy & 2D Flat M5Stack CoreS3 Theme (Gemini Live)
+   🍬 Sweet Candy & 2D Flat M5Stack CoreS3 Theme + Hardware Deck (Gemini Live)
    ========================================================================== */
 
 :root {
@@ -20,7 +20,8 @@
   --banana-light: #fef08a;
   --banana-dark: #d97706;
   --mint-green: #10b981;
-  --cyan-accent: #06b6d4;
+  --mint-light: #a7f3d0;
+  --grape-purple: #8b5cf6;
 
   /* Line & Shadow (Rich Cocoa Brown) */
   --cocoa-dark: #2d2438;
@@ -28,7 +29,7 @@
   --cocoa-light: #e5def0;
   --card-shadow: #2d2438;
 
-  /* M5Stack CoreS3 2D Colors (Accurate to Photos) */
+  /* M5Stack CoreS3 2D Colors */
   --cores3-shell-white: #f8fafc;
   --cores3-shell-shadow: #cbd5e1;
   --cores3-bezel-black: #080c14;
@@ -64,7 +65,7 @@ body {
 /* Outer Candy Package Container */
 .candy-package-app {
   width: 100%;
-  max-width: 660px;
+  max-width: 680px;
   display: flex;
   flex-direction: column;
   background: var(--card-white);
@@ -189,13 +190,13 @@ body {
 }
 
 /* ==========================================================================
-   🎪 Robot Showcase Stage (2D Flat Showcase)
+   🎪 Robot Showcase Stage (2D Flat)
    ========================================================================== */
 .package-body {
-  padding: 20px 20px 16px;
+  padding: 16px 16px 14px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   background: var(--bg-cream);
 }
 
@@ -204,7 +205,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 24px 0 16px;
+  padding: 18px 0 14px;
   background: linear-gradient(180deg, #e0f2fe 0%, #f0fdf4 100%);
   border: 3px solid var(--cocoa-dark);
   border-radius: 14px;
@@ -214,7 +215,7 @@ body {
   overflow: hidden;
 }
 
-/* Stack-chan Robot Root (2D Breathing & Bounce) */
+/* 2D Breathing & Bounce */
 .stackchan-robot {
   display: flex;
   flex-direction: column;
@@ -254,34 +255,32 @@ body {
   }
 }
 
-/* ==========================================================================
-   🤖 2D M5Stack CoreS3 Square Face Shell (Accurate to Photos)
-   ========================================================================== */
+/* 2D M5Stack CoreS3 Square Face Shell */
 .cores3-face-shell {
-  width: 250px;
-  height: 250px; /* Perfect 1:1 Square Proportion */
+  width: 220px;
+  height: 220px; /* Perfect 1:1 Square */
   background: var(--cores3-shell-white);
   border: 4px solid var(--cocoa-dark);
-  border-radius: 28px;
+  border-radius: 26px;
   box-shadow:
     inset -5px -5px 0px var(--cores3-shell-shadow),
     inset 5px 5px 0px #ffffff,
     4px 6px 0px rgba(45, 36, 56, 0.25);
-  padding: 10px;
+  padding: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
 }
 
-/* Front Black Glass Bezel */
+/* Black Glass Bezel */
 .head-bezel {
   width: 100%;
   height: 100%;
   background: var(--cores3-bezel-black);
   border: 3px solid var(--cocoa-dark);
   border-radius: 18px;
-  padding: 8px 8px 6px;
+  padding: 6px 6px 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -289,7 +288,7 @@ body {
   position: relative;
 }
 
-/* 2.0" IPS LCD Screen Canvas */
+/* 2.0" Screen Canvas */
 .screen-wrapper {
   width: 100%;
   flex: 1;
@@ -310,7 +309,6 @@ body {
   display: block;
 }
 
-/* Glass Glare Reflection */
 .screen-glass-glare {
   position: absolute;
   top: 0;
@@ -326,14 +324,14 @@ body {
   pointer-events: none;
 }
 
-/* Bezel Bottom Sensors (Photo 5 Exact Reproduction) */
+/* Bottom Sensors */
 .bezel-bottom {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  margin-top: 6px;
-  height: 12px;
+  gap: 12px;
+  margin-top: 5px;
+  height: 10px;
 }
 
 .sensor-hole {
@@ -343,10 +341,9 @@ body {
   border-radius: 50%;
 }
 
-/* Camera Lens with Signature Orange Ring */
 .sensor-camera-wrap {
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   background: var(--camera-orange-ring);
   display: flex;
@@ -356,20 +353,55 @@ body {
 }
 
 .camera-lens {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   background: #080c14;
   border: 1px solid #1e293b;
   border-radius: 50%;
 }
 
 /* ==========================================================================
-   🎮 Pop Control Deck & Buttons
+   🎮 Control Deck & Mode Tabs
    ========================================================================== */
 .candy-deck {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+}
+
+.deck-mode-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tab-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.95rem;
+  font-weight: bold;
+  padding: 8px 14px;
+  border: 3px solid var(--cocoa-dark);
+  border-radius: 8px 8px 0 0;
+  background: #e2e8f0;
+  color: var(--cocoa-dim);
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--cocoa-dark);
+}
+
+.tab-btn.active {
+  background: var(--strawberry-pink);
+  color: #ffffff;
+  border-bottom: 3px solid var(--strawberry-pink);
+  box-shadow: 3px 3px 0px var(--cocoa-dark);
+}
+
+.tab-content {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tab-content.active {
+  display: flex;
 }
 
 .deck-row {
@@ -383,11 +415,12 @@ body {
   flex-wrap: wrap;
 }
 
+/* Pop 3D Buttons */
 .pop-btn {
   font-family: var(--font-pixel);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: bold;
-  padding: 9px 16px;
+  padding: 8px 14px;
   border: 3px solid var(--cocoa-dark);
   border-radius: 10px;
   cursor: pointer;
@@ -402,6 +435,12 @@ body {
   transition:
     transform 0.05s,
     box-shadow 0.05s;
+}
+
+.pop-btn.btn-sm {
+  font-size: 0.82rem;
+  padding: 4px 8px;
+  border-radius: 6px;
 }
 
 .pop-btn:active:not(:disabled) {
@@ -441,7 +480,7 @@ body {
 /* Voice Level Meter */
 .candy-meter-box {
   flex: 1.4;
-  min-width: 170px;
+  min-width: 160px;
   background: #ffffff;
   border: 3px solid var(--cocoa-dark);
   border-radius: 10px;
@@ -519,11 +558,11 @@ body {
 }
 
 .dialog-content {
-  min-height: 80px;
-  max-height: 130px;
+  min-height: 70px;
+  max-height: 110px;
   overflow-y: auto;
   font-size: 1.05rem;
-  line-height: 1.6;
+  line-height: 1.5;
   color: var(--cocoa-dark);
   display: flex;
   flex-direction: column;
@@ -541,7 +580,7 @@ body {
 
 .system-msg {
   color: var(--cocoa-dim);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .msg-stackchan {
@@ -551,6 +590,278 @@ body {
 
 .msg-user {
   color: var(--strawberry-dark);
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   🛠️ Hardware Deck (Web Flasher & Monitor & BLE Styling)
+   ========================================================================== */
+.hw-section-box {
+  background: #ffffff;
+  border: 3px solid var(--cocoa-dark);
+  border-radius: 12px;
+  box-shadow: 4px 4px 0px var(--cocoa-dark);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 2px dashed var(--cocoa-light);
+  padding-bottom: 4px;
+}
+
+.sec-icon {
+  font-size: 1rem;
+}
+
+.sec-text {
+  font-family: var(--font-retro);
+  font-size: 0.6rem;
+  color: var(--cocoa-dark);
+}
+
+.sec-desc {
+  font-size: 0.88rem;
+  color: var(--cocoa-dim);
+  line-height: 1.4;
+}
+
+/* Form Stack for Flasher */
+.flasher-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.form-group-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.hw-action-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.btn-hw-connect {
+  background: var(--soda-blue);
+  color: #ffffff;
+  flex: 1;
+}
+
+.btn-hw-flash {
+  background: var(--banana-yellow);
+  color: var(--cocoa-dark);
+  min-width: 170px;
+}
+
+.btn-ble-apply {
+  background: var(--mint-green);
+  color: #ffffff;
+  width: 100%;
+}
+
+.chip-info-badge {
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  background: #f1f5f9;
+  border: 1.5px solid var(--cocoa-light);
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: var(--cocoa-dim);
+}
+
+.flash-burn-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.pixel-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  color: var(--cocoa-dark);
+  cursor: pointer;
+  flex: 1;
+}
+
+.pixel-checkbox-label.sm {
+  font-size: 0.8rem;
+}
+
+.hw-progress-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.progress-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-retro);
+  font-size: 0.45rem;
+  color: var(--cocoa-dim);
+}
+
+.factory-restore-note {
+  background: #f8fafc;
+  border: 2px dashed var(--cocoa-light);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 4px;
+}
+
+.note-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.note-body {
+  font-size: 0.82rem;
+  color: var(--cocoa-dim);
+  line-height: 1.4;
+}
+
+.note-body a {
+  color: var(--soda-blue);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.note-body code {
+  background: #e2e8f0;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: ui-monospace, monospace;
+}
+
+/* Serial Monitor */
+.monitor-control-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.form-group-inline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.form-group-inline label {
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.serial-terminal-window {
+  background: #0f172a;
+  border: 2px solid var(--cocoa-dark);
+  border-radius: 8px;
+  padding: 8px 10px;
+  box-shadow: inset 2px 2px 0px #000;
+}
+
+.serial-log-content {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #38bdf8;
+  min-height: 100px;
+  max-height: 180px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+}
+
+/* Config Form Grid */
+.config-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  color: var(--cocoa-dark);
+  font-weight: bold;
+}
+
+.pixel-input,
+.pixel-textarea,
+.pixel-select {
+  font-family: var(--font-pixel);
+  font-size: 0.92rem;
+  padding: 6px 8px;
+  border: 2px solid var(--cocoa-dark);
+  border-radius: 6px;
+  background: #f8fafc;
+  color: var(--cocoa-dark);
+  outline: none;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.pixel-select.sm {
+  padding: 3px 6px;
+  font-size: 0.82rem;
+  width: auto;
+}
+
+.pixel-input:focus,
+.pixel-textarea:focus,
+.pixel-select:focus {
+  background: #ffffff;
+  border-color: var(--strawberry-pink);
+}
+
+.pixel-textarea {
+  resize: vertical;
+}
+
+.ble-status-msg {
+  font-family: var(--font-pixel);
+  font-size: 0.9rem;
+  color: var(--soda-blue);
+  margin-top: 4px;
   font-weight: bold;
 }
 

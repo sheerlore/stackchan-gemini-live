@@ -25,7 +25,7 @@ export class RelayClient {
     console.log(`[RelayClient] Target WebSocket URL: ${this.url}`);
   }
 
-  public connect(): void {
+  public connect(systemInstruction?: string, voiceName?: string): void {
     if (
       this.ws &&
       (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)
@@ -41,8 +41,8 @@ export class RelayClient {
       this.ws.onopen = () => {
         console.log("[RelayClient] Connected to backend relay WebSocket");
         this.events.onStatusChange("connecting");
-        // Request session start to Gemini
-        this.send({ type: "start_session" });
+        // Request session start to Gemini with custom system instruction and voice
+        this.send({ type: "start_session", systemInstruction, voiceName });
       };
 
       this.ws.onmessage = (event) => {

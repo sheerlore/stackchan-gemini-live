@@ -4,3 +4,6 @@
 [submodule "reference/ganesha-stackchan"]
 	path = reference/ganesha-stackchan
 	url = git@github.com:ramtuc/ganesha-stackchan.git
+[submodule "reference/stackchan-idf"]
+	path = reference/stackchan-idf
+	url = git@github.com:ciniml/stackchan-idf.git

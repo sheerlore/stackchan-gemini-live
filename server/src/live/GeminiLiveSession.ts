@@ -23,7 +23,7 @@ export class GeminiLiveSession {
     this.toolRegistry = toolRegistry;
   }
 
-  public async connect(): Promise<void> {
+  public async connect(customSystemInstruction?: string, customVoiceName?: string): Promise<void> {
     if (!config.geminiApiKey) {
       const err = 'GEMINI_API_KEY is not configured in .env';
       this.callbacks.onError(err);
@@ -37,23 +37,36 @@ export class GeminiLiveSession {
 
     // Model name format for SDK (strip 'models/' prefix if present)
     const model = config.geminiModel.replace(/^models\//, '');
+    const activeVoice = (customVoiceName && customVoiceName.trim()) ? customVoiceName.trim() : config.voiceName;
+    const rawInstruction = (customSystemInstruction && customSystemInstruction.trim())
+      ? customSystemInstruction.trim()
+      : STACKCHAN_SYSTEM_INSTRUCTION;
+
+    // Strict persona instruction framing for Gemini Live API
+    const finalInstruction = `
+[SYSTEM DIRECTIVE: STRICT ROLEPLAY & PERSONA INSTRUCTIONS]
+You MUST strictly adopt the following persona and character rules in all your voice responses. Never break character.
+
+${rawInstruction}
+`.trim();
 
     console.log(`[GeminiLive] Initializing Gemini Live session via official SDK (@google/genai)...`);
-    console.log(`[GeminiLive] Model: ${model}, Voice: ${config.voiceName}`);
+    console.log(`[GeminiLive] Model: ${model}, Voice: ${activeVoice}`);
+    console.log(`[GeminiLive] Applied System Instruction (${finalInstruction.length} chars)`);
 
     const liveConfig: any = {
       responseModalities: [Modality.AUDIO],
       speechConfig: {
         voiceConfig: {
           prebuiltVoiceConfig: {
-            voiceName: config.voiceName,
+            voiceName: activeVoice,
           },
         },
       },
       systemInstruction: {
         parts: [
           {
-            text: STACKCHAN_SYSTEM_INSTRUCTION,
+            text: finalInstruction,
           },
         ],
       },

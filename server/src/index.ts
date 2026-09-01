@@ -94,7 +94,7 @@ wss.on('connection', (clientWs: WebSocket) => {
           );
 
           try {
-            await geminiSession.connect();
+            await geminiSession.connect(msg.systemInstruction, msg.voiceName);
             console.log('[Server] Session ready, notifying client.');
             sendToClient({ type: 'session_started' });
           } catch (err: any) {

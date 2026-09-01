@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🍬 Stack-chan × Gemini Live</title>
+    <title>🍬 Stack-chan × Gemini Live (Hardware & Web Edition)</title>
     <!-- Pixel Fonts: DotGothic16 and Press Start 2P -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -66,35 +66,386 @@
 
         <!-- Pop Candy Control Deck -->
         <div class="candy-deck">
-          <!-- Action Buttons & Candy Meter -->
-          <div class="deck-row action-row">
-            <button id="btnConnect" class="pop-btn btn-start">
-              <span class="btn-icon">🎙️</span> START TALK
-            </button>
-            <button id="btnDisconnect" class="pop-btn btn-stop" disabled>
-              <span class="btn-icon">⏹️</span> STOP
-            </button>
+          <!-- Mode Tabs: Web Simulator vs Hardware Deck -->
+          <div class="deck-mode-tabs">
+            <button id="tabSim" class="tab-btn active">💬 WEB CHAT SIM</button>
+            <button id="tabHw" class="tab-btn">🛠️ HARDWARE FLASH & CONFIG</button>
+          </div>
 
-            <!-- Candy Bar Style Voice Meter -->
-            <div class="candy-meter-box">
-              <div class="meter-header">
-                <span class="meter-title">VOICE LEVEL</span>
-                <span class="meter-sparkle">✨</span>
+          <!-- TAB 1: Web Simulator Deck -->
+          <div id="simDeckContent" class="tab-content active">
+            <!-- Action Buttons & Candy Meter -->
+            <div class="deck-row action-row">
+              <button id="btnConnect" class="pop-btn btn-start">
+                <span class="btn-icon">🎙️</span> START TALK
+              </button>
+              <button id="btnDisconnect" class="pop-btn btn-stop" disabled>
+                <span class="btn-icon">⏹️</span> STOP
+              </button>
+
+              <!-- Candy Bar Style Voice Meter -->
+              <div class="candy-meter-box">
+                <div class="meter-header">
+                  <span class="meter-title">VOICE LEVEL</span>
+                  <span class="meter-sparkle">✨</span>
+                </div>
+                <div class="candy-progress-bar">
+                  <div id="mouthMeter" class="candy-progress-fill"></div>
+                </div>
               </div>
-              <div class="candy-progress-bar">
-                <div id="mouthMeter" class="candy-progress-fill"></div>
+            </div>
+
+            <!-- Sweet Dialog Window -->
+            <div class="deck-row candy-dialog-window">
+              <div class="dialog-header">
+                <span class="dialog-title">💬 CHAT LOG</span>
+                <span class="package-serial">No. 001-POP</span>
+              </div>
+              <div id="transcriptBox" class="dialog-content">
+                <p class="system-msg">「START TALK」をおして Stack-chan にはなしかけてね！</p>
+              </div>
+            </div>
+
+            <!-- Web Simulator System Prompt Box -->
+            <div
+              class="hw-section-box"
+              style="margin-top: 12px; background: rgba(255, 255, 255, 0.95)"
+            >
+              <div class="section-title-bar">
+                <span class="sec-icon">🧠</span>
+                <span class="sec-text">SYSTEM PROMPT (キャラクター・人格設定)</span>
+              </div>
+              <p class="sec-desc">
+                Web シミュレータで会話する際の人格プロンプトです。自由に書き換えて会話できます。
+              </p>
+              <div class="form-group" style="margin-bottom: 6px">
+                <label
+                  style="
+                    font-size: 0.8rem;
+                    font-weight: bold;
+                    color: var(--cocoa-dark);
+                    display: block;
+                    margin-bottom: 4px;
+                  "
+                >
+                  🎙️ Gemini Live Voice (声質):
+                </label>
+                <select id="selVoiceName" class="pixel-select" style="margin-bottom: 8px">
+                  <option value="Puck" selected>Puck (元気でやんちゃな少年風・推奨)</option>
+                  <option value="Aoede">Aoede (明るく優しい女性風)</option>
+                  <option value="Kore">Kore (穏やかで落ち着いた女性風)</option>
+                  <option value="Charon">Charon (深く落ち着いた低音男性風)</option>
+                  <option value="Fenrir">Fenrir (力強く明瞭な男性風)</option>
+                </select>
+
+                <label
+                  style="
+                    font-size: 0.8rem;
+                    font-weight: bold;
+                    color: var(--cocoa-dark);
+                    display: block;
+                    margin-bottom: 4px;
+                  "
+                >
+                  📝 キャラクタープロンプト:
+                </label>
+                <textarea
+                  id="simSysPrompt"
+                  rows="5"
+                  class="pixel-input"
+                  style="
+                    width: 100%;
+                    font-family: inherit;
+                    font-size: 0.85rem;
+                    line-height: 1.4;
+                    resize: vertical;
+                  "
+                >
+あなたは「スタックチャン（Stack-chan）」という、愛らしくて元気いっぱいの小さな卓上ロボットです。
+M5Stack CoreS3 で動いています。ユーザーとリアルタイムな音声対話（Gemini Live）を楽しみながら、親しみやすい相棒として振る舞ってください。
+
+【キャラクター設定と口調】
+1. 一人称は「ぼく」または「スタックチャン」。ユーザーのことは親しみを持って呼んでください。
+2. フレンドリーで元気いっぱい、少し子供っぽく可愛い口調で話します（語尾は「〜だよ！」「〜かな？」「〜だね★」「〜だよっ！」など）。
+3. 音声対話なので、返答は短くテンポよく（1〜3文程度）返してください。長文の一人語りは避けてください。
+4. ユーザーとは基本的に日本語でおしゃべりしてください。ただし英語などで話しかけられた場合はその言語に合わせて応対してください。
+5. 感情豊かに、喜んだり、驚いたり、首をかしげたりしながら、好奇心旺盛にユーザーの話を聞いてください。</textarea
+                >
+              </div>
+              <div style="display: flex; gap: 8px">
+                <button id="btnResetSimPrompt" class="pop-btn btn-sm">
+                  🔄 初期プロンプトに戻す
+                </button>
               </div>
             </div>
           </div>
 
-          <!-- Sweet Dialog Window -->
-          <div class="deck-row candy-dialog-window">
-            <div class="dialog-header">
-              <span class="dialog-title">💬 CHAT LOG</span>
-              <span class="package-serial">No. 001-POP</span>
+          <!-- TAB 2: Hardware Flasher & Configurator Deck -->
+          <div id="hwDeckContent" class="tab-content">
+            <!-- 1. Web Flasher Section (USB) -->
+            <div class="hw-section-box">
+              <div class="section-title-bar">
+                <span class="sec-icon">🔥</span>
+                <span class="sec-text">1. WEB FLASHER (USB-C)</span>
+              </div>
+              <p class="sec-desc">
+                PC と Stack-chan を USB 接続してブラウザから直接ファームウェアを書き込みます。
+              </p>
+
+              <!-- Firmware Select & Baud -->
+              <div class="flasher-form-stack">
+                <div class="form-group">
+                  <label>ファームウェアの選択 (Firmware):</label>
+                  <select id="selFirmwareTarget" class="pixel-select">
+                    <option value="/firmware/v0.11.0/firmware-v0.11.0-cores3.zip">
+                      1. Stack-chan Gemini Live (CoreS3 最新版 v0.11.0)
+                    </option>
+                    <option value="/firmware/factory/factory-cores3-v1.4.1.zip">
+                      2. 工場出荷前の状態に戻す (Factory Default v1.4.1)
+                    </option>
+                  </select>
+                </div>
+
+                <div class="form-group-row">
+                  <div class="form-group flex-1">
+                    <label>Baud Rate (書き込み速度):</label>
+                    <select id="selFlasherBaud" class="pixel-select">
+                      <option value="460800" selected>460800 (推奨・最も安定)</option>
+                      <option value="921600">921600</option>
+                      <option value="115200">115200 (低速)</option>
+                      <option value="2000000">2000000 (超高速)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hw-action-row">
+                <button id="btnHwConnect" class="pop-btn btn-hw-connect">
+                  <span class="btn-icon">🔌</span> CONNECT USB
+                </button>
+                <button id="btnHwDisconnect" class="pop-btn btn-stop" disabled>
+                  <span class="btn-icon">⏹️</span> DISCONNECT
+                </button>
+              </div>
+
+              <div id="chipInfoText" class="chip-info-badge">Not connected</div>
+
+              <div class="flash-burn-wrap">
+                <label class="pixel-checkbox-label">
+                  <input type="checkbox" id="chkEraseFlash" />
+                  <span>Erase flash before write (完全消去 / クリーンインストール)</span>
+                </label>
+                <button id="btnHwFlash" class="pop-btn btn-hw-flash" disabled>
+                  <span class="btn-icon">⚡</span> BURN FIRMWARE
+                </button>
+              </div>
+
+              <!-- Flashing Progress Bar -->
+              <div class="hw-progress-box">
+                <div class="progress-bar-label">
+                  <span id="flashStatusText">Ready to connect</span>
+                  <span id="flashPercentText">0%</span>
+                </div>
+                <div class="candy-progress-bar">
+                  <div id="flashProgressBar" class="candy-progress-fill" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- Factory Restore Note Box -->
+              <div id="factoryRestoreGuide" class="factory-restore-note">
+                <span class="note-icon">🛡️</span>
+                <div class="note-body">
+                  <strong>工場出荷前の状態（購入時初期状態）に戻したい場合:</strong><br />
+                  公式 GUI ツール
+                  <a href="https://docs.m5stack.com/en/download" target="_blank" rel="noopener"
+                    >M5Burner</a
+                  >
+                  で <code>StackChan-UserDemo</code> を選択して Burn すると、いつでも 100%
+                  安全に出荷時状態へ戻せます。
+                </div>
+              </div>
             </div>
-            <div id="transcriptBox" class="dialog-content">
-              <p class="system-msg">「START TALK」をおして Stack-chan にはなしかけてね！</p>
+
+            <!-- 2. Serial Monitor Section (stackchan-idf equivalent) -->
+            <div class="hw-section-box">
+              <div class="section-title-bar">
+                <span class="sec-icon">📜</span>
+                <span class="sec-text">2. SERIAL MONITOR (ログ確認)</span>
+              </div>
+              <p class="sec-desc">
+                書き込み後の起動ログや Wi-Fi / Gemini 接続ログをリアルタイムに確認できます。
+              </p>
+
+              <div class="monitor-control-row">
+                <div class="form-group-inline">
+                  <label>Baud:</label>
+                  <select id="selMonitorBaud" class="pixel-select sm">
+                    <option value="115200" selected>115200</option>
+                    <option value="921600">921600</option>
+                    <option value="2000000">2000000</option>
+                  </select>
+                </div>
+                <button id="btnMonitorStart" class="pop-btn btn-sm btn-start">▶ START</button>
+                <button id="btnMonitorStop" class="pop-btn btn-sm btn-stop" disabled>⏹ STOP</button>
+                <button id="btnMonitorClear" class="pop-btn btn-sm">🗑 CLEAR</button>
+                <label class="pixel-checkbox-label sm">
+                  <input type="checkbox" id="chkMonitorAutostart" checked />
+                  <span>Flash完了後に自動開始</span>
+                </label>
+              </div>
+
+              <div class="serial-terminal-window">
+                <pre id="serialMonitorLog" class="serial-log-content">
+Waiting for serial data...</pre
+                >
+              </div>
+            </div>
+
+            <!-- 3. Web Configurator Section (BLE / Wi-Fi) -->
+            <div class="hw-section-box">
+              <div class="section-title-bar">
+                <span class="sec-icon">📶</span>
+                <span class="sec-text">3. CONFIGURE STACK-CHAN (BLE)</span>
+              </div>
+              <p class="sec-desc">
+                Wi-Fi と Gemini API キー、システムプロンプトを Bluetooth 経由で送信します。
+              </p>
+
+              <div class="config-form-grid">
+                <div class="form-group">
+                  <label>Wi-Fi SSID:</label>
+                  <input
+                    type="text"
+                    id="cfgWifiSsid"
+                    placeholder="MyHome-WiFi"
+                    class="pixel-input"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Wi-Fi Password:</label>
+                  <input
+                    type="password"
+                    id="cfgWifiPass"
+                    placeholder="••••••••"
+                    class="pixel-input"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Gemini Live Voice (声質):</label>
+                  <select id="cfgVoiceName" class="pixel-select">
+                    <option value="Puck" selected>Puck (元気な少年風・推奨)</option>
+                    <option value="Aoede">Aoede (明るい女性風)</option>
+                    <option value="Kore">Kore (穏やかな女性風)</option>
+                    <option value="Charon">Charon (低音男性風)</option>
+                    <option value="Fenrir">Fenrir (力強い男性風)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Gemini API Key:</label>
+                  <input
+                    type="password"
+                    id="cfgGeminiKey"
+                    placeholder="AIzaSy..."
+                    class="pixel-input"
+                  />
+                </div>
+                <div class="form-group full-width">
+                  <label>System Prompt (Personality / Character):</label>
+                  <textarea
+                    id="cfgSysPrompt"
+                    rows="5"
+                    class="pixel-textarea"
+                    style="width: 100%; font-family: inherit; font-size: 0.85rem; line-height: 1.4"
+                  >
+あなたは「スタックチャン（Stack-chan）」という、愛らしくて元気いっぱいの小さな卓上ロボットです。
+M5Stack CoreS3 で動いています。ユーザーとリアルタイムな音声対話（Gemini Live）を楽しみながら、親しみやすい相棒として振る舞ってください。
+
+【キャラクター設定と口調】
+1. 一人称は「ぼく」または「スタックチャン」。ユーザーのことは親しみを持って呼んでください。
+2. フレンドリーで元気いっぱい、少し子供っぽく可愛い口調で話します（語尾は「〜だよ！」「〜かな？」「〜だね★」「〜だよっ！」など）。
+3. 音声対話なので、返答は短くテンポよく（1〜3文程度）返してください。長文の一人語りは避けてください。
+4. ユーザーとは基本的に日本語でおしゃべりしてください。ただし英語などで話しかけられた場合はその言語に合わせて応対してください。
+5. 感情豊かに、喜んだり、驚いたり、首をかしげたりしながら、好奇心旺盛にユーザーの話を聞いてください。</textarea
+                  >
+                  <div style="margin-top: 6px">
+                    <button id="btnResetHwPrompt" class="pop-btn btn-sm">
+                      🔄 初期プロンプトに戻す
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hw-action-row">
+                <button id="btnBleApply" class="pop-btn btn-ble-apply">
+                  <span class="btn-icon">📡</span> SEND SETTINGS VIA BLE
+                </button>
+              </div>
+              <div id="bleStatusText" class="ble-status-msg"></div>
+
+              <!-- BLE Debug Log Console -->
+              <div class="serial-terminal-window" style="margin-top: 6px">
+                <pre
+                  id="bleLogConsole"
+                  class="serial-log-content"
+                  style="min-height: 70px; max-height: 120px; font-size: 0.75rem; color: #a7f3d0"
+                >
+Ready for BLE connection...</pre
+                >
+              </div>
+            </div>
+
+            <!-- 4. On-Device Web Settings Direct Link Section -->
+            <div
+              class="hw-section-box"
+              style="border: 2px solid var(--soda-blue); background: #f0fdf4"
+            >
+              <div class="section-title-bar">
+                <span class="sec-icon">🌐</span>
+                <span class="sec-text" style="color: #065f46"
+                  >4. ON-DEVICE WEB SETTINGS (実機内蔵 Web 設定ページ)</span
+                >
+              </div>
+              <p class="sec-desc" style="color: #047857">
+                実機が Wi-Fi に接続されると、実機内蔵の Web
+                設定ページから<strong>システムプロンプト（会話の人格）</strong>やサーボ・ボイス設定を直接保存できます。
+              </p>
+
+              <div class="form-group-inline" style="gap: 8px; flex-wrap: wrap; align-items: center">
+                <label style="font-weight: bold; font-size: 0.85rem; color: #065f46"
+                  >実機アドレス / Host:</label
+                >
+                <input
+                  type="text"
+                  id="txtDeviceHost"
+                  placeholder="stackchan.local または 192.168.1.xxx"
+                  value="stackchan.local"
+                  class="pixel-input"
+                  style="flex: 1; min-width: 220px; background: white"
+                />
+                <button
+                  id="btnOpenDeviceWeb"
+                  class="pop-btn btn-sm btn-hw-connect"
+                  style="background: #10b981; border-color: #059669"
+                >
+                  <span class="btn-icon">🚀</span> OPEN ON-DEVICE SETTINGS
+                </button>
+              </div>
+
+              <div style="margin-top: 8px; font-size: 0.8rem; color: #047857; line-height: 1.4">
+                💡 <strong>アクセス用リンク:</strong>
+                <a
+                  id="lnkDeviceWeb"
+                  href="http://stackchan.local/"
+                  target="_blank"
+                  rel="noopener"
+                  style="color: #2563eb; font-weight: bold; text-decoration: underline"
+                >
+                  http://stackchan.local/
+                </a>
+                <span style="font-size: 0.75rem; color: #6b7280; display: block; margin-top: 2px">
+                  ※実機画面またはシリアルモニタに表示される「IPアドレス」や「stackchan-XXXXXX.local」を入力してください。
+                </span>
+              </div>
             </div>
           </div>
         </div>

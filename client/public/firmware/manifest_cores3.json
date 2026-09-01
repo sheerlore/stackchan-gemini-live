@@ -1,0 +1,12 @@
+{
+  "name": "Stack-chan Gemini Live (M5Stack CoreS3)",
+  "version": "v0.11.0",
+  "chipFamily": "ESP32-S3",
+  "parts": [
+    {
+      "name": "bootloader.bin",
+      "address": 0,
+      "url": "https://raw.githubusercontent.com/ciniml/stackchan-idf/gh-pages/ota_data_initial.bin"
+    }
+  ]
+}

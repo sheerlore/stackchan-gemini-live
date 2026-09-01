@@ -1,0 +1,13 @@
+{
+  "name": "M5Stack 公式出荷時ファームウェア (StackChan-UserDemo)",
+  "version": "Factory Default",
+  "chipFamily": "ESP32-S3",
+  "description": "購入時の初期状態（公式メニュー・アバター・スマホアプリ連携）へ完全復旧します",
+  "parts": [
+    {
+      "name": "factory_bootloader.bin",
+      "address": 0,
+      "url": "https://raw.githubusercontent.com/ciniml/stackchan-idf/gh-pages/ota_data_initial.bin"
+    }
+  ]
+}
